@@ -1,5 +1,5 @@
 import socket
-# TODO go to http server project and add *if main*
+# TODO change every time the IPv4 settings so this server will get DNS requests
 DNS_SERVER_IP = '0.0.0.0'
 DNS_SERVER_PORT = 53
 DEFAULT_BUFFER_SIZE = 1024
