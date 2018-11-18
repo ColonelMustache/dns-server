@@ -1,4 +1,5 @@
 import socket
+import dns_server_handling as dsh
 # TODO change every time the IPv4 settings so this server will get DNS requests
 DNS_SERVER_IP = '0.0.0.0'
 DNS_SERVER_PORT = 53
@@ -10,7 +11,18 @@ def dns_handler(data, address):
     print address
     print data
     print '==='
+    header = data[:12]
+    dsh.get_flag_qr(header)
+    """
+    id_hex = data[:2].encode('hex')  # ID
+    header_hex = data[2:12]  # .encode('hex')  # flags
+    domain_name = data[12:].encode('hex')
+    print id_hex, header_hex, domain_name
+    """
     for char in data:
+        print char.encode('hex'),
+    print
+    for char in header:
         print char.encode('hex'),
     print
 
