@@ -12,7 +12,9 @@ def dns_handler(data, address):
     print data
     print '==='
     header = data[:12]
-    dsh.get_flag_qr(header)
+    request = dsh.DnsQuery(header, data[12:])
+    print request.qname
+    # dsh.get_query_url(data[12:])
     """
     id_hex = data[:2].encode('hex')  # ID
     header_hex = data[2:12]  # .encode('hex')  # flags
@@ -21,9 +23,11 @@ def dns_handler(data, address):
     """
     for char in data:
         print char.encode('hex'),
+    """
     print
     for char in header:
         print char.encode('hex'),
+    """
     print
 
 
