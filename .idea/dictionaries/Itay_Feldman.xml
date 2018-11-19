@@ -4,6 +4,9 @@
       <w>arcount</w>
       <w>nscount</w>
       <w>opcode</w>
+      <w>qclass</w>
+      <w>qname</w>
+      <w>qtype</w>
       <w>rcode</w>
     </words>
   </dictionary>
