@@ -16,7 +16,6 @@ class DnsQuery:
         self.qname = self.get_query_url([x.encode('hex') for x in data]).split()
         self.qtype = get_record_type(data)
         self.qclass = get_query_class(data)
-        self.response = ''
 
     def get_query_url(self, bytes_list):
         # until null (00 byte)
@@ -31,8 +30,12 @@ class DnsQuery:
         return zone + " " + self.get_query_url(bytes_list[counter + 1:])
 
     def create_response(self):
-        self.response += self.id
-        # self.response
+        pass
+
+    def basic_response(self):
+        response = ''
+        response += self.id
+        response += 0b1  # sending response; qr = 1ss
 
 
 def get_request_id(header):
