@@ -12,7 +12,7 @@ print test_hex_list
 
 print 'HERE'
 
-
+"""
 def recursive_test_full(bytes_list):
     zones = []
 
@@ -28,7 +28,8 @@ def recursive_test_full(bytes_list):
         return [zone, " " + recursive_test(byte_list[counter + 1:])]
     return recursive_test(bytes_list)  # [::-1]
 
-
 zones = recursive_test_full(test_hex_list)
 print zones
-
+"""
+ls = ['root'] + ['com', 'google', 'www']
+print ls

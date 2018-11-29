@@ -1,3 +1,5 @@
+from records import *
+
 class DnsQuery:
     def __init__(self, header, data):
         relevant_word = header[2:4].encode('hex')
@@ -13,7 +15,7 @@ class DnsQuery:
         self.num_of_queries = get_num_of_queries(header)
         self.num_of_answers = get_num_of_answers(header)
         self.other = get_nscount_and_arcount(header)
-        self.qname = self.get_query_url([x.encode('hex') for x in data]).split()
+        self.qname = [root] + self.get_query_url([x.encode('hex') for x in data]).split()[::-1]
         self.qtype = get_record_type(data)
         self.qclass = get_query_class(data)
 
