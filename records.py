@@ -1,5 +1,9 @@
+co = {
+    'il': '104.28.29.70'
+}
 google = {
-    'www': '173.194.32.240'
+    'www': '173.194.32.240',
+    'co': co
 }
 com = {
     'google': google
@@ -7,17 +11,14 @@ com = {
 root = {
     'com': com
 }
-print root['com']['google']['www']
-print 'hello'
 
-# host_name = [root, 'com', 'google', 'www'] | host_name[index][host_name[index+1]]
+
+# host_name = ['root', 'com', 'google', 'www'] | host_name[index][host_name[index+1]]
 def get_ip(host_name):  # TODO fix this
-    ip = ''
-    for i, zone in range(len(host_name)), host_name:
-        print host_name[i]
-        ip = host_name[i][host_name[i+1]]
-    print ip
+    ip = globals()[host_name[0]]
+    for i in range(1, len(host_name)):
+        ip = ip[host_name[i]]
     return ip
 
 
-get_ip([root, 'com', 'google', 'www'])
+# get_ip(['root', 'com', 'google', 'www'])

@@ -13,22 +13,21 @@ def dns_handler(data, address):
     # print '==='
     header = data[:12]
     request = dsh.DnsQuery(header, data[12:])
-    print request.qname
+    # print request.qname
     # dsh.get_query_url(data[12:])
     """
     id_hex = data[:2].encode('hex')  # ID
     header_hex = data[2:12]  # .encode('hex')  # flags
     domain_name = data[12:].encode('hex')
     print id_hex, header_hex, domain_name
-    """
     for char in data:
-        print char.encode('hex'),
-    """
+        print char.encode('hex')
     print
     for char in header:
         print char.encode('hex'),
     """
-    print
+    print 'sup'
+    return request
 
 
 def dns_udp_server(ip, port):
@@ -43,7 +42,9 @@ def dns_udp_server(ip, port):
     while True:
         try:
             data, address = server_socket.recvfrom(DEFAULT_BUFFER_SIZE)
-            dns_handler(data, address)
+            request = dns_handler(data, address)
+            print request.resolved_ip
+            server_socket.sendto(request.response, address)
         except Exception, ex:
             print 'Client exception! %s' % (str(ex), )
 

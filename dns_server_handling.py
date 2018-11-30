@@ -1,4 +1,5 @@
-from records import *
+from records import get_ip
+
 
 class DnsQuery:
     def __init__(self, header, data):
@@ -15,9 +16,12 @@ class DnsQuery:
         self.num_of_queries = get_num_of_queries(header)
         self.num_of_answers = get_num_of_answers(header)
         self.other = get_nscount_and_arcount(header)
-        self.qname = [root] + self.get_query_url([x.encode('hex') for x in data]).split()[::-1]
+        self.qsection = data
+        self.qname = ['root'] + self.get_query_url([x.encode('hex') for x in data]).split()[::-1]
         self.qtype = get_record_type(data)
         self.qclass = get_query_class(data)
+        self.resolved_ip = get_ip(self.qname)
+        self.response = self.respond()
 
     def get_query_url(self, bytes_list):
         # until null (00 byte)
@@ -31,13 +35,36 @@ class DnsQuery:
         # print bytes_list[counter + 1:]
         return zone + " " + self.get_query_url(bytes_list[counter + 1:])
 
-    def create_response(self):
-        pass
-
-    def basic_response(self):
-        response = ''
-        response += self.id
-        response += 0b1  # sending response; qr = 1ss
+    def respond(self):
+        print type(self.id.decode('hex')), self.id.decode('hex'), '+1 space', len(self.id.decode('hex'))
+        print 'hello:', ''.join('{0:02x}'.format(int(x)).decode('hex') for x in self.resolved_ip.split('.'))
+        header = self.id.decode('hex')
+        temp = '1'
+        temp += str(self.opcode)
+        print str(self.opcode), len(str(self.opcode))
+        temp += '0'
+        temp += '0'
+        temp += str(self.rd)
+        temp += '0'
+        temp += '000'
+        temp += '0000'  # word
+        print len(temp)
+        print '{0:02x}'.format(int(temp, 2)).decode('hex'), '{0:02x}'.format(int(temp, 2))
+        header += 0x01
+        header += 0x01
+        header += 0x00
+        header += 0x00
+        qsection = self.qsection.decode('hex')
+        answer = 0xc00c
+        answer += 0x01
+        answer += 0x00
+        answer += 0x003c
+        answer += 0x04
+        answer += ''.join('{0:02x}'.format(int(x)).decode('hex') for x in self.resolved_ip.split('.'))
+        print 'hello:', ''.join('{0:02x}'.format(int(x)).decode('hex') for x in self.resolved_ip.split('.'))
+        print temp, qsection, answer, 'HELLO'
+        full_response = temp + qsection + answer
+        return full_response
 
 
 def get_request_id(header):
@@ -58,7 +85,8 @@ def get_flag_qr(word):
 def get_opcode(word):
     # bits 1-4
     result = (int(word, 16) >> 11) & 0b01111
-    return int(str(result), 2)
+    print result
+    return '{0:04b}'.format(int(str(result), 2))
 
 
 def get_flag_aa(word):
@@ -121,4 +149,3 @@ def get_record_type(data):
 def get_query_class(data):
     # last word
     return data[len(data) - 2:].encode('hex')
-
