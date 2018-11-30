@@ -1,3 +1,6 @@
+print '{0:04x}'.format(0x0001).decode('hex')
+
+
 print hex(213)
 print (29 & 0b00010000) >> 3  # 0001000 -> 00100000
 print bin(int('80', 16) & 128)
@@ -37,7 +40,7 @@ def recursive_test_full(bytes_list):
             zone += byte_list[i].decode('hex')
         print counter + 1
         print byte_list[counter + 1:]
-        return [zone, " " + recursive_test(byte_list[counter + 1:])]
+        return
     return recursive_test(bytes_list)  # [::-1]
 
 zones = recursive_test_full(test_hex_list)

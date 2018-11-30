@@ -2,7 +2,8 @@ from records import get_ip
 
 
 class DnsQuery:
-    def __init__(self, header, data):
+    def __init__(self, header, data, address):
+        self.address = address
         relevant_word = header[2:4].encode('hex')
         self.id = get_request_id(header)
         self.qr = get_flag_qr(relevant_word)
@@ -48,22 +49,25 @@ class DnsQuery:
         temp += '0'
         temp += '000'
         temp += '0000'  # word
-        print len(temp)
-        print '{0:02x}'.format(int(temp, 2)).decode('hex'), '{0:02x}'.format(int(temp, 2))
-        header += 0x01
-        header += 0x01
-        header += 0x00
-        header += 0x00
-        qsection = self.qsection.decode('hex')
-        answer = 0xc00c
-        answer += 0x01
-        answer += 0x00
-        answer += 0x003c
-        answer += 0x04
+        temp = '{0:04x}'.format(int(temp, 2)).decode('hex')
+        print temp
+        header += temp
+        # print '{0:02x}'.format(int(temp, 2)).decode('hex'), '{0:02x}'.format(int(temp, 2)), 'HERE!'
+        header += '{0:04x}'.format(0x0001).decode('hex')
+        header += '{0:04x}'.format(0x0001).decode('hex')
+        header += '{0:04x}'.format(0x0000).decode('hex')
+        header += '{0:04x}'.format(0x0000).decode('hex')
+        qsection = self.qsection
+        answer = '{0:04x}'.format(0xc00c).decode('hex')
+        answer += '{0:04x}'.format(0x0001).decode('hex')
+        answer += '{0:04x}'.format(0x0000).decode('hex')
+        answer += '{0:08x}'.format(0x0000003c).decode('hex')
+        answer += '{0:04x}'.format(0x0004).decode('hex')
         answer += ''.join('{0:02x}'.format(int(x)).decode('hex') for x in self.resolved_ip.split('.'))
+        print self.resolved_ip.split('.')
         print 'hello:', ''.join('{0:02x}'.format(int(x)).decode('hex') for x in self.resolved_ip.split('.'))
         print temp, qsection, answer, 'HELLO'
-        full_response = temp + qsection + answer
+        full_response = header + qsection + answer
         return full_response
 
 

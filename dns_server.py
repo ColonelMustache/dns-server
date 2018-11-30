@@ -1,6 +1,7 @@
 import socket
 import dns_server_handling as dsh
-# TODO change every time the IPv4 settings so this server will get DNS requests
+# TODO Change every time the IPv4 settings so this server will get DNS requests
+# TODO Add logging function
 DNS_SERVER_IP = '0.0.0.0'
 DNS_SERVER_PORT = 53
 DEFAULT_BUFFER_SIZE = 1024
@@ -12,7 +13,7 @@ def dns_handler(data, address):
     print data
     # print '==='
     header = data[:12]
-    request = dsh.DnsQuery(header, data[12:])
+    request = dsh.DnsQuery(header, data[12:], address)
     # print request.qname
     # dsh.get_query_url(data[12:])
     """
@@ -43,6 +44,7 @@ def dns_udp_server(ip, port):
         try:
             data, address = server_socket.recvfrom(DEFAULT_BUFFER_SIZE)
             request = dns_handler(data, address)
+            print request.response.encode('hex')
             print request.resolved_ip
             server_socket.sendto(request.response, address)
         except Exception, ex:

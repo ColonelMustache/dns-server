@@ -2,11 +2,15 @@ co = {
     'il': '104.28.29.70'
 }
 google = {
-    'www': '173.194.32.240',
+    'www': '127.0.0.1',
     'co': co
 }
+itay = {
+    'www': '127.0.0.1'  # '23.221.143.117'
+}
 com = {
-    'google': google
+    'google': google,
+    'itay': itay
 }
 root = {
     'com': com
